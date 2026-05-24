@@ -2,32 +2,8 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Mój Sklep</title>
+  <title>BITEME. - Sklep</title>
   <style>
-  .modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-  background: white;
-  width: 90%;
-  max-width: 400px;
-  margin: 100px auto;
-  padding: 20px;
-  border-radius: 15px;
-}
-
-.close {
-  float: right;
-  cursor: pointer;
-  font-size: 24px;
-}
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -45,7 +21,7 @@
 
     .container {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       padding: 20px;
     }
@@ -62,10 +38,11 @@
       background: black;
       color: white;
       border: none;
-      padding: 10px;
+      padding: 10px 20px;
       cursor: pointer;
       margin-top: 10px;
       border-radius: 5px;
+      font-size: 16px;
     }
 
     .cart {
@@ -73,6 +50,42 @@
       padding: 20px;
       margin: 20px;
       border-radius: 10px;
+      text-align: center;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 450px;
+      margin: 80px auto;
+      padding: 25px;
+      border-radius: 15px;
+      position: relative;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .close:hover {
+      color: red;
     }
   </style>
 </head>
@@ -89,32 +102,39 @@
   <div class="product">
     <h3>paznokcie</h3>
     <p>100 zł</p>
-    <button onclick="addToCart(100, 'paznokcie')">
-Dodaj
-</button>
+    <button onclick="addToCart(100, 'Paznokcie')">Dodaj</button>
   </div>
 
   <div class="product">
     <h3>paznokcie</h3>
     <p>120 zł</p>
-    <button onclick="addToCart(120, 'paznokcie')">
-Dodaj
-</button>
+    <button onclick="addToCart(120, 'Paznokcie premium')">Dodaj</button>
   </div>
 
   <div class="product">
     <h3>zestaw do aplikacji</h3>
     <p>30 zł</p>
-    <button onclick="addToCart(30, 'zestaw do aplikacji')">
-Dodaj
-</button>
+    <button onclick="addToCart(30, 'Zestaw do aplikacji')">Dodaj</button>
   </div>
 </div>
 
 <div class="cart">
-  <h2>Koszyk</h2>
+  <h2>Podsumowanie koszyka</h2>
   <p>Liczba produktów: <span id="cart-items">0</span></p>
   <p>Do zapłaty: <span id="cart-sum">0</span> zł</p>
+</div>
+
+<!-- MODAL KOSZYKA -->
+<div id="cart-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeCart()">×</span>
+    <h2>Twój koszyk 🛒</h2>
+    <div id="cart-items-list"></div>
+    <hr>
+    <p><strong>Suma: <span id="modal-total">0</span> zł</strong></p>
+    <button onclick="clearCart()" style="background:red; margin-top:10px;">Wyczyść koszyk</button>
+    <button onclick="closeCart()" style="margin-top:10px;">Zamknij</button>
+  </div>
 </div>
 
 <script>
@@ -127,21 +147,36 @@ function addToCart(price, name) {
 
 function updateCart() {
   let total = 0;
-  let count = cart.length;
   let list = "";
 
-  cart.forEach(item => {
+  cart.forEach((item, index) => {
     total += item.price;
-    list += `<p>${item.name} - ${item.price} zł</p>`;
+    list += `
+      <p>
+        ${item.name} - ${item.price} zł
+        <button onclick="removeFromCart(${index})" style="float:right; background:red; color:white; border:none; padding:2px 8px;">Usuń</button>
+      </p>`;
   });
 
-  document.getElementById("cart-count").innerText = count;
-  document.getElementById("cart-items").innerText = count;
+  document.getElementById("cart-count").innerText = cart.length;
+  document.getElementById("cart-items").innerText = cart.length;
   document.getElementById("cart-total").innerText = total;
   document.getElementById("cart-sum").innerText = total;
-
   document.getElementById("cart-items-list").innerHTML = list;
   document.getElementById("modal-total").innerText = total;
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCart();
+}
+
+function clearCart() {
+  if (confirm("Czy na pewno chcesz wyczyścić cały koszyk?")) {
+    cart = [];
+    updateCart();
+    closeCart();
+  }
 }
 
 function openCart() {
@@ -151,16 +186,12 @@ function openCart() {
 function closeCart() {
   document.getElementById("cart-modal").style.display = "none";
 }
-</script>div id="cart-modal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeCart()">&times;</span>
 
-    <h2>Twój koszyk 🛒</h2>
+// Zamknięcie modalu po kliknięciu w tło
+document.getElementById("cart-modal").addEventListener('click', function(e) {
+  if (e.target === this) closeCart();
+});
+</script>
 
-    <div id="cart-items-list"></div>
-
-    <p>Suma: <span id="modal-total">0</span> zł</p>
-  </div>
-</div>
 </body>
 </html>
