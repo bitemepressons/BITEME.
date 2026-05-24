@@ -121,18 +121,24 @@ Dodaj
 let cart = [];
 
 function addToCart(price, name) {
-  cart.push({ name, price });
+  cart.push({ price, name });
   updateCart();
 }
 
 function updateCart() {
   let total = 0;
+  let count = cart.length;
   let list = "";
 
   cart.forEach(item => {
     total += item.price;
     list += `<p>${item.name} - ${item.price} zł</p>`;
   });
+
+  document.getElementById("cart-count").innerText = count;
+  document.getElementById("cart-items").innerText = count;
+  document.getElementById("cart-total").innerText = total;
+  document.getElementById("cart-sum").innerText = total;
 
   document.getElementById("cart-items-list").innerHTML = list;
   document.getElementById("modal-total").innerText = total;
@@ -145,20 +151,7 @@ function openCart() {
 function closeCart() {
   document.getElementById("cart-modal").style.display = "none";
 }
-  let count = 0;
-  let total = 0;
-
-  function addToCart(price) {
-    count++;
-    total += price;
-
-    document.getElementById("cart-count").innerText = count;
-    document.getElementById("cart-items").innerText = count;
-    document.getElementById("cart-total").innerText = total;
-    document.getElementById("cart-sum").innerText = total;
-  }
-</script>
-<div id="cart-modal" class="modal">
+</script>div id="cart-modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeCart()">&times;</span>
 
