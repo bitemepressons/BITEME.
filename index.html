@@ -4,6 +4,30 @@
   <meta charset="UTF-8">
   <title>Mój Sklep</title>
   <style>
+  .modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background: white;
+  width: 90%;
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 24px;
+}
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -58,25 +82,32 @@
 <header>
   <h1>BITEME.</h1>
   <div>Koszyk: <span id="cart-count">0</span> | Suma: <span id="cart-total">0</span> zł</div>
+  <button onclick="openCart()">Koszyk 🛒</button>
 </header>
 
 <div class="container">
   <div class="product">
     <h3>paznokcie</h3>
     <p>100 zł</p>
-    <button onclick="addToCart(49)">Dodaj do koszyka</button>
+    <button onclick="addToCart(100, 'paznokcie')">
+Dodaj
+</button>
   </div>
 
   <div class="product">
     <h3>paznokcie</h3>
     <p>120 zł</p>
-    <button onclick="addToCart(120)">Dodaj do koszyka</button>
+    <button onclick="addToCart(120, 'paznokcie')">
+Dodaj
+</button>
   </div>
 
   <div class="product">
     <h3>zestaw do aplikacji</h3>
     <p>30 zł</p>
-    <button onclick="addToCart(30)">Dodaj do koszyka</button>
+    <button onclick="addToCart(30, 'zestaw do aplikacji')">
+Dodaj
+</button>
   </div>
 </div>
 
@@ -87,6 +118,33 @@
 </div>
 
 <script>
+let cart = [];
+
+function addToCart(price, name) {
+  cart.push({ name, price });
+  updateCart();
+}
+
+function updateCart() {
+  let total = 0;
+  let list = "";
+
+  cart.forEach(item => {
+    total += item.price;
+    list += `<p>${item.name} - ${item.price} zł</p>`;
+  });
+
+  document.getElementById("cart-items-list").innerHTML = list;
+  document.getElementById("modal-total").innerText = total;
+}
+
+function openCart() {
+  document.getElementById("cart-modal").style.display = "block";
+}
+
+function closeCart() {
+  document.getElementById("cart-modal").style.display = "none";
+}
   let count = 0;
   let total = 0;
 
@@ -100,6 +158,16 @@
     document.getElementById("cart-sum").innerText = total;
   }
 </script>
+<div id="cart-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeCart()">&times;</span>
 
+    <h2>Twój koszyk 🛒</h2>
+
+    <div id="cart-items-list"></div>
+
+    <p>Suma: <span id="modal-total">0</span> zł</p>
+  </div>
+</div>
 </body>
 </html>
