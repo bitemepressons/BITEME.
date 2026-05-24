@@ -104,17 +104,17 @@
 <div class="container">
 
   <div class="product">
-    <img src="https://picsum.photos/id/1015/400/300" alt="Paznokcie">
+    <img src="https://ibb.co/Z1WkP6r5" alt="Paznokcie">
     <h3>Paznokcie</h3>
     <p><strong>100 zł</strong></p>
     <button onclick="addToCart(100, 'Paznokcie')">Dodaj do koszyka</button>
   </div>
 
   <div class="product">
-    <img src="https://picsum.photos/id/106/400/300" alt="Paznokcie Premium">
-    <h3>Paznokcie Premium</h3>
+    <img src="https://ibb.co/tTVHnNFh" alt="Paznokcie">
+    <h3>Paznokcie</h3>
     <p><strong>120 zł</strong></p>
-    <button onclick="addToCart(120, 'Paznokcie Premium')">Dodaj do koszyka</button>
+    <button onclick="addToCart(120, 'Paznokcie')">Dodaj do koszyka</button>
   </div>
 
   <div class="product">
@@ -122,86 +122,4 @@
     <h3>Zestaw do aplikacji</h3>
     <p><strong>30 zł</strong></p>
     <button onclick="addToCart(30, 'Zestaw do aplikacji')">Dodaj do koszyka</button>
-  </div>
-
-</div>
-
-<!-- Modal Koszyka -->
-<div id="cart-modal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeCart()">×</span>
-    <h2>Twój koszyk 🛒</h2>
-    <div id="cart-items-list"></div>
-    <hr>
-    <p><strong>Suma: <span id="modal-total">0</span> zł</strong></p>
-    
-    <button onclick="goToPayment()" style="background:#28a745; color:white; width:100%; padding:12px; margin:10px 0;">Przejdź do płatności →</button>
-    <button onclick="clearCart()" style="background:#dc3545; color:white; width:100%;">Wyczyść koszyk</button>
-  </div>
-</div>
-
-<script>
-let cart = [];
-
-function addToCart(price, name) {
-  cart.push({ price, name });
-  updateCart();
-}
-
-function updateCart() {
-  let total = cart.reduce((sum, item) => sum + item.price, 0);
-  let list = "";
-
-  cart.forEach((item, index) => {
-    list += `
-      <p>
-        ${item.name} — ${item.price} zł
-        <button onclick="removeFromCart(${index})" style="float:right; background:red; color:white; border:none; padding:3px 8px; border-radius:4px;">Usuń</button>
-      </p>`;
-  });
-
-  document.getElementById("cart-count").innerText = cart.length;
-  document.getElementById("cart-total").innerText = total;
-  document.getElementById("modal-total").innerText = total;
-  document.getElementById("cart-items-list").innerHTML = list || "<p>Koszyk jest pusty.</p>";
-}
-
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  updateCart();
-}
-
-function clearCart() {
-  if (confirm("Czy na pewno chcesz wyczyścić koszyk?")) {
-    cart = [];
-    updateCart();
-    closeCart();
-  }
-}
-
-function openCart() {
-  document.getElementById("cart-modal").style.display = "block";
-}
-
-function closeCart() {
-  document.getElementById("cart-modal").style.display = "none";
-}
-
-// Zamknięcie modalu klikając w tło
-document.getElementById("cart-modal").addEventListener('click', function(e) {
-  if (e.target === this) closeCart();
-});
-
-// Płatność (tymczasowa symulacja)
-function goToPayment() {
-  if (cart.length === 0) {
-    alert("Koszyk jest pusty!");
-    return;
-  }
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-  alert(`Przechodzisz do płatności.\nDo zapłaty: ${total} zł\n\n(W tym miejscu w przyszłości będzie prawdziwa bramka płatności)`);
-}
-</script>
-
-</body>
-</html>
+  </
