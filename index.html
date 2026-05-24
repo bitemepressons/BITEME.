@@ -21,39 +21,47 @@
 
     .container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 30px;
     }
 
     .product {
       background: white;
       padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .product h3 {
+      margin: 10px 0 5px 0;
     }
 
     .product button {
       background: black;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 25px;
       cursor: pointer;
       margin-top: 10px;
-      border-radius: 5px;
+      border-radius: 6px;
       font-size: 16px;
     }
 
-    .cart {
-      background: white;
-      padding: 20px;
-      margin: 20px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -61,14 +69,14 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.7);
       z-index: 1000;
     }
 
     .modal-content {
       background: white;
       width: 90%;
-      max-width: 450px;
+      max-width: 480px;
       margin: 80px auto;
       padding: 25px;
       border-radius: 15px;
@@ -79,13 +87,8 @@
       position: absolute;
       top: 10px;
       right: 15px;
-      font-size: 28px;
+      font-size: 30px;
       cursor: pointer;
-      color: #333;
-    }
-
-    .close:hover {
-      color: red;
     }
   </style>
 </head>
@@ -99,32 +102,31 @@
 </header>
 
 <div class="container">
+
   <div class="product">
-    <h3>paznokcie</h3>
-    <p>100 zł</p>
-    <button onclick="addToCart(100, 'Paznokcie')">Dodaj</button>
+    <img src="https://picsum.photos/id/1015/400/300" alt="Paznokcie">
+    <h3>Paznokcie</h3>
+    <p><strong>100 zł</strong></p>
+    <button onclick="addToCart(100, 'Paznokcie')">Dodaj do koszyka</button>
   </div>
 
   <div class="product">
-    <h3>paznokcie</h3>
-    <p>120 zł</p>
-    <button onclick="addToCart(120, 'Paznokcie premium')">Dodaj</button>
+    <img src="https://picsum.photos/id/106/400/300" alt="Paznokcie Premium">
+    <h3>Paznokcie Premium</h3>
+    <p><strong>120 zł</strong></p>
+    <button onclick="addToCart(120, 'Paznokcie Premium')">Dodaj do koszyka</button>
   </div>
 
   <div class="product">
-    <h3>zestaw do aplikacji</h3>
-    <p>30 zł</p>
-    <button onclick="addToCart(30, 'Zestaw do aplikacji')">Dodaj</button>
+    <img src="https://picsum.photos/id/201/400/300" alt="Zestaw do aplikacji">
+    <h3>Zestaw do aplikacji</h3>
+    <p><strong>30 zł</strong></p>
+    <button onclick="addToCart(30, 'Zestaw do aplikacji')">Dodaj do koszyka</button>
   </div>
+
 </div>
 
-<div class="cart">
-  <h2>Podsumowanie koszyka</h2>
-  <p>Liczba produktów: <span id="cart-items">0</span></p>
-  <p>Do zapłaty: <span id="cart-sum">0</span> zł</p>
-</div>
-
-<!-- MODAL KOSZYKA -->
+<!-- Modal Koszyka -->
 <div id="cart-modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeCart()">×</span>
@@ -132,8 +134,9 @@
     <div id="cart-items-list"></div>
     <hr>
     <p><strong>Suma: <span id="modal-total">0</span> zł</strong></p>
-    <button onclick="clearCart()" style="background:red; margin-top:10px;">Wyczyść koszyk</button>
-    <button onclick="closeCart()" style="margin-top:10px;">Zamknij</button>
+    
+    <button onclick="goToPayment()" style="background:#28a745; color:white; width:100%; padding:12px; margin:10px 0;">Przejdź do płatności →</button>
+    <button onclick="clearCart()" style="background:#dc3545; color:white; width:100%;">Wyczyść koszyk</button>
   </div>
 </div>
 
@@ -146,24 +149,21 @@ function addToCart(price, name) {
 }
 
 function updateCart() {
-  let total = 0;
+  let total = cart.reduce((sum, item) => sum + item.price, 0);
   let list = "";
 
   cart.forEach((item, index) => {
-    total += item.price;
     list += `
       <p>
-        ${item.name} - ${item.price} zł
-        <button onclick="removeFromCart(${index})" style="float:right; background:red; color:white; border:none; padding:2px 8px;">Usuń</button>
+        ${item.name} — ${item.price} zł
+        <button onclick="removeFromCart(${index})" style="float:right; background:red; color:white; border:none; padding:3px 8px; border-radius:4px;">Usuń</button>
       </p>`;
   });
 
   document.getElementById("cart-count").innerText = cart.length;
-  document.getElementById("cart-items").innerText = cart.length;
   document.getElementById("cart-total").innerText = total;
-  document.getElementById("cart-sum").innerText = total;
-  document.getElementById("cart-items-list").innerHTML = list;
   document.getElementById("modal-total").innerText = total;
+  document.getElementById("cart-items-list").innerHTML = list || "<p>Koszyk jest pusty.</p>";
 }
 
 function removeFromCart(index) {
@@ -172,7 +172,7 @@ function removeFromCart(index) {
 }
 
 function clearCart() {
-  if (confirm("Czy na pewno chcesz wyczyścić cały koszyk?")) {
+  if (confirm("Czy na pewno chcesz wyczyścić koszyk?")) {
     cart = [];
     updateCart();
     closeCart();
@@ -187,10 +187,20 @@ function closeCart() {
   document.getElementById("cart-modal").style.display = "none";
 }
 
-// Zamknięcie modalu po kliknięciu w tło
+// Zamknięcie modalu klikając w tło
 document.getElementById("cart-modal").addEventListener('click', function(e) {
   if (e.target === this) closeCart();
 });
+
+// Płatność (tymczasowa symulacja)
+function goToPayment() {
+  if (cart.length === 0) {
+    alert("Koszyk jest pusty!");
+    return;
+  }
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  alert(`Przechodzisz do płatności.\nDo zapłaty: ${total} zł\n\n(W tym miejscu w przyszłości będzie prawdziwa bramka płatności)`);
+}
 </script>
 
 </body>
