@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Mój Sklep</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .product {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .product button {
+      background: black;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .cart {
+      background: white;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>BITEME.</h1>
+  <div>Koszyk: <span id="cart-count">0</span> | Suma: <span id="cart-total">0</span> zł</div>
+</header>
+
+<div class="container">
+  <div class="product">
+    <h3>paznokcie</h3>
+    <p>100 zł</p>
+    <button onclick="addToCart(49)">Dodaj do koszyka</button>
+  </div>
+
+  <div class="product">
+    <h3>paznokcie</h3>
+    <p>120 zł</p>
+    <button onclick="addToCart(120)">Dodaj do koszyka</button>
+  </div>
+
+  <div class="product">
+    <h3>zestaw do aplikacji</h3>
+    <p>30 zł</p>
+    <button onclick="addToCart(30)">Dodaj do koszyka</button>
+  </div>
+</div>
+
+<div class="cart">
+  <h2>Koszyk</h2>
+  <p>Liczba produktów: <span id="cart-items">0</span></p>
+  <p>Do zapłaty: <span id="cart-sum">0</span> zł</p>
+</div>
+
+<script>
+  let count = 0;
+  let total = 0;
+
+  function addToCart(price) {
+    count++;
+    total += price;
+
+    document.getElementById("cart-count").innerText = count;
+    document.getElementById("cart-items").innerText = count;
+    document.getElementById("cart-total").innerText = total;
+    document.getElementById("cart-sum").innerText = total;
+  }
+</script>
+
+</body>
+</html>
