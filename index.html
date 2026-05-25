@@ -45,14 +45,6 @@
       font-size: 16px;
     }
 
-    .cart {
-      background: white;
-      padding: 20px;
-      margin: 20px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
     /* Modal */
     .modal {
       display: none;
@@ -100,28 +92,22 @@
 
 <div class="container">
   <div class="product">
-    <h3>paznokcie</h3>
+    <h3>Paznokcie</h3>
     <p>100 zł</p>
     <button onclick="addToCart(100, 'Paznokcie')">Dodaj</button>
   </div>
 
   <div class="product">
-    <h3>paznokcie</h3>
+    <h3>Paznokcie</h3>
     <p>120 zł</p>
-    <button onclick="addToCart(120, 'Paznokcie premium')">Dodaj</button>
+    <button onclick="addToCart(120, 'Paznokcie')">Dodaj</button>
   </div>
 
   <div class="product">
-    <h3>zestaw do aplikacji</h3>
+    <h3>Zestaw do aplikacji</h3>
     <p>30 zł</p>
     <button onclick="addToCart(30, 'Zestaw do aplikacji')">Dodaj</button>
   </div>
-</div>
-
-<div class="cart">
-  <h2>Podsumowanie koszyka</h2>
-  <p>Liczba produktów: <span id="cart-items">0</span></p>
-  <p>Do zapłaty: <span id="cart-sum">0</span> zł</p>
 </div>
 
 <!-- MODAL KOSZYKA -->
@@ -132,8 +118,9 @@
     <div id="cart-items-list"></div>
     <hr>
     <p><strong>Suma: <span id="modal-total">0</span> zł</strong></p>
-    <button onclick="clearCart()" style="background:red; margin-top:10px;">Wyczyść koszyk</button>
-    <button onclick="closeCart()" style="margin-top:10px;">Zamknij</button>
+    
+    <button onclick="goToPayment()" style="background:#28a745; color:white; width:100%; padding:12px; margin:8px 0;">Przejdź do płatności →</button>
+    <button onclick="clearCart()" style="background:red; color:white; width:100%;">Wyczyść koszyk</button>
   </div>
 </div>
 
@@ -146,11 +133,10 @@ function addToCart(price, name) {
 }
 
 function updateCart() {
-  let total = 0;
+  let total = cart.reduce((sum, item) => sum + item.price, 0);
   let list = "";
 
   cart.forEach((item, index) => {
-    total += item.price;
     list += `
       <p>
         ${item.name} - ${item.price} zł
@@ -159,11 +145,9 @@ function updateCart() {
   });
 
   document.getElementById("cart-count").innerText = cart.length;
-  document.getElementById("cart-items").innerText = cart.length;
   document.getElementById("cart-total").innerText = total;
-  document.getElementById("cart-sum").innerText = total;
-  document.getElementById("cart-items-list").innerHTML = list;
   document.getElementById("modal-total").innerText = total;
+  document.getElementById("cart-items-list").innerHTML = list || "<p>Koszyk jest pusty.</p>";
 }
 
 function removeFromCart(index) {
@@ -185,6 +169,15 @@ function openCart() {
 
 function closeCart() {
   document.getElementById("cart-modal").style.display = "none";
+}
+
+function goToPayment() {
+  if (cart.length === 0) {
+    alert("Koszyk jest pusty!");
+    return;
+  }
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  alert(`Przechodzisz do płatności.\nDo zapłaty: ${total} zł`);
 }
 
 // Zamknięcie modalu po kliknięciu w tło
