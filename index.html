@@ -21,27 +21,35 @@
 
     .container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 30px;
     }
 
     .product {
       background: white;
       padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       text-align: center;
+    }
+
+    .product img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
     }
 
     .product button {
       background: black;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 25px;
       cursor: pointer;
       margin-top: 10px;
-      border-radius: 5px;
+      border-radius: 6px;
       font-size: 16px;
     }
 
@@ -75,10 +83,6 @@
       cursor: pointer;
       color: #333;
     }
-
-    .close:hover {
-      color: red;
-    }
   </style>
 </head>
 
@@ -98,6 +102,7 @@
   </div>
 
   <div class="product">
+    <img src="https://ibb.co/XrRvcNbR" alt="Custom Nails">
     <h3>Custom Nails</h3>
     <p>69 zł</p>
     <button onclick="addToCart(69, 'Custom Nails')">Dodaj</button>
@@ -134,51 +139,4 @@ function updateCart() {
     list += `
       <p>
         ${item.name} - ${item.price} zł
-        <button onclick="removeFromCart(${index})" style="float:right; background:red; color:white; border:none; padding:2px 8px;">Usuń</button>
-      </p>`;
-  });
-
-  document.getElementById("cart-count").innerText = cart.length;
-  document.getElementById("cart-total").innerText = total;
-  document.getElementById("modal-total").innerText = total;
-  document.getElementById("cart-items-list").innerHTML = list || "<p>Koszyk jest pusty.</p>";
-}
-
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  updateCart();
-}
-
-function clearCart() {
-  if (confirm("Czy na pewno chcesz wyczyścić cały koszyk?")) {
-    cart = [];
-    updateCart();
-    closeCart();
-  }
-}
-
-function openCart() {
-  document.getElementById("cart-modal").style.display = "block";
-}
-
-function closeCart() {
-  document.getElementById("cart-modal").style.display = "none";
-}
-
-function goToPayment() {
-  if (cart.length === 0) {
-    alert("Koszyk jest pusty!");
-    return;
-  }
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-  alert(`Przechodzisz do płatności.\nDo zapłaty: ${total} zł`);
-}
-
-// Zamknięcie modalu po kliknięciu w tło
-document.getElementById("cart-modal").addEventListener('click', function(e) {
-  if (e.target === this) closeCart();
-});
-</script>
-
-</body>
-</html>
+        <button
