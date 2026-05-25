@@ -102,7 +102,7 @@
   </div>
 
   <div class="product">
-    <img src="https://ibb.co/XrRvcNbR" alt="Custom Nails">
+    <img src="https://ibb.co/wb5dtNb" alt="Custom Nails">
     <h3>Custom Nails</h3>
     <p>69 zł</p>
     <button onclick="addToCart(69, 'Custom Nails')">Dodaj</button>
@@ -139,4 +139,50 @@ function updateCart() {
     list += `
       <p>
         ${item.name} - ${item.price} zł
-        <button
+        <button onclick="removeFromCart(${index})" style="float:right; background:red; color:white; border:none; padding:3px 8px;">Usuń</button>
+      </p>`;
+  });
+
+  document.getElementById("cart-count").innerText = cart.length;
+  document.getElementById("cart-total").innerText = total;
+  document.getElementById("modal-total").innerText = total;
+  document.getElementById("cart-items-list").innerHTML = list || "<p>Koszyk jest pusty.</p>";
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCart();
+}
+
+function clearCart() {
+  if (confirm("Czy na pewno chcesz wyczyścić koszyk?")) {
+    cart = [];
+    updateCart();
+    closeCart();
+  }
+}
+
+function openCart() {
+  document.getElementById("cart-modal").style.display = "block";
+}
+
+function closeCart() {
+  document.getElementById("cart-modal").style.display = "none";
+}
+
+document.getElementById("cart-modal").addEventListener('click', function(e) {
+  if (e.target === this) closeCart();
+});
+
+function goToPayment() {
+  if (cart.length === 0) {
+    alert("Koszyk jest pusty!");
+    return;
+  }
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  alert(`Przechodzisz do płatności.\nDo zapłaty: ${total} zł`);
+}
+</script>
+
+</body>
+</html>
